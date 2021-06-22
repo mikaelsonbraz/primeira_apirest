@@ -1,0 +1,192 @@
+---
+swagger: "2.0"
+info:
+  description: "Essa API provê o acesso aos usuários do sistema"
+  version: "0.0.1"
+  title: "Lista de Usuários"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "mikaelsonmrn@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "api.meusite.com"
+basePath: "/v1"
+schemes:
+- "https"
+- "http"
+paths:
+  /users:
+    get:
+      tags:
+      - "Users"
+      summary: "Lista de usuários"
+      description: "\"Este endpoint retorna uma lista com **todos** os usuários cadastrados\
+        \ no sistema\"\n"
+      operationId: "users_get"
+      parameters: []
+      responses:
+        "200":
+          description: "Uma lista de usuários"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        default:
+          description: "Erro inesperado"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "swagger_server.controllers.users_controller"
+    post:
+      tags:
+      - "Users"
+      summary: "Cria um usuário"
+      description: "Este endpoint cadastra um usuário no sistema"
+      operationId: "users_post"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "Usuário enviado"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "201":
+          description: "Usuário cadastrado"
+          schema:
+            $ref: "#/definitions/User"
+        default:
+          description: "Erro inesperado"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "swagger_server.controllers.users_controller"
+    put:
+      tags:
+      - "Users"
+      summary: "Atualiza um usuário"
+      description: "Este endpoint atualiza um usuário no sistema (O id deve ser informado)\n"
+      operationId: "users_put"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "Usuário enviado"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: "Usuário atualizado"
+          schema:
+            $ref: "#/definitions/User"
+        "404":
+          description: "Usuário não encontrado"
+        default:
+          description: "Erro inesperado"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "swagger_server.controllers.users_controller"
+    patch:
+      tags:
+      - "Users"
+      summary: "Atualiza um usuário"
+      description: "Este endpoint atualiza um usuário no sistema (O id deve ser informado)\n"
+      operationId: "users_patch"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "Usuário enviado"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        "200":
+          description: "Usuário atualizado"
+          schema:
+            $ref: "#/definitions/User"
+        "404":
+          description: "Usuário não encontrado"
+        default:
+          description: "Erro inesperado"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "swagger_server.controllers.users_controller"
+  /users/{id}:
+    get:
+      tags:
+      - "Users"
+      summary: "Mostra apenas um usuário"
+      description: "Este endpoint mostra **apenas um** usuário através do id fornecido\n"
+      operationId: "users_id_get"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id do usuário"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Usuário encontrado"
+          schema:
+            $ref: "#/definitions/User"
+        default:
+          description: "Erro inesperado"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "swagger_server.controllers.users_controller"
+    delete:
+      tags:
+      - "Users"
+      summary: "Apaga um usuário"
+      description: "Este endpoint apaga **apenas um** usuário através do id fornecido\n"
+      operationId: "users_id_delete"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id do usuário"
+        required: true
+        type: "integer"
+      responses:
+        "200":
+          description: "Usuário apagado"
+          schema:
+            $ref: "#/definitions/User"
+        "404":
+          description: "Usuário não encontrado"
+        "410":
+          description: "Usuário não mais existente"
+        default:
+          description: "Erro inesperado"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "swagger_server.controllers.users_controller"
+definitions:
+  User:
+    type: "object"
+    required:
+    - "email"
+    - "name"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        description: "Esse é o código do usuário"
+      email:
+        type: "string"
+        description: "Email do usuário"
+      name:
+        type: "string"
+        description: "Nome do usuário"
+    example:
+      name: "name"
+      id: 0
+      email: "email"
+  Error:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
+      fields:
+        type: "string"
